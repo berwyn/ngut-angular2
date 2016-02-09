@@ -11,8 +11,12 @@ import { TodoPipe } from './todoPipe';
         <div class="ngut-app">
             <input type="text" [(ngModel)]="newTodo.text" />
             <input type="button" value="Create" (click)="createTodo()" />
+            <select #sel (change)="sel.value">
+                <option value="false">Incomplete</option>
+                <option value="true">Finished</option>
+            </select>
             <ul>
-                <li *ngFor="#todo of todoService.getAll() | finished">
+                <li *ngFor="#todo of todoService.getAll() | finished: sel.value">
                     <todo-item [todo]="todo" (toggle)="toggleTodo($event)"></todo-item>
                 </li>
             </ul>

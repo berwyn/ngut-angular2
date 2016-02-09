@@ -4,8 +4,8 @@ import { Todo } from './todo';
 @Pipe({ name: 'finished' })
 export class TodoPipe {
     
-    transform(value: Todo[]) {
-        return value.filter(t => !t.done);
+    transform(value: Todo[], [done]) {
+        return value.filter(t => t.done === (done === 'true'));
     }
     
 }
