@@ -3,6 +3,7 @@ import { NgFor, NgModel } from 'angular2/common';
 import { Todo } from './todo';
 import { TodoService } from './todoService';
 import { TodoItem } from './todoItem';
+import { TodoPipe } from './todoPipe';
 
 @Component({
     selector: 'app',
@@ -11,8 +12,8 @@ import { TodoItem } from './todoItem';
             <input type="text" [(ngModel)]="newTodo.text" />
             <input type="button" value="Create" (click)="createTodo()" />
             <ul>
-                <li *ngFor="#todo of todos">
-                    <todo-item [todo]="todo"></todo-item>
+                <li *ngFor="#todo of todoService.getAll() | finished">
+                    <todo-item [todo]="todo" (toggle)="toggleTodo($event)"></todo-item>
                 </li>
             </ul>
         </div>
@@ -21,20 +22,25 @@ import { TodoItem } from './todoItem';
         NgFor,
         NgModel,
         TodoItem
+    ],
+    pipes: [
+        TodoPipe
     ]
 })
 export class App {
     
-    todos: Todo[];
     newTodo: Todo;
     
     constructor(private todoService: TodoService) {
-        this.todos = this.todoService.getAll();
         this.newTodo = new Todo();
     }
     
     createTodo() {
         this.todoService.addTodo(this.newTodo);
         this.newTodo = new Todo();
+    }
+    
+    toggleTodo(todo: Todo) {
+        this.todoService.toggle(todo);
     }
 }
